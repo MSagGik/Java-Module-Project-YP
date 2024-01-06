@@ -63,7 +63,7 @@ public class Main {
             if(costProduct > 0) {
                 costSum += costProduct; // подсчёт суммы введённых товаров
                 listProduct.add(new Product(nameProduct, costProduct));
-                System.out.println("В корзину был добавлен товар " + nameProduct + " стоимостью " + costProduct + " рублей\n" +
+                System.out.println("В корзину был добавлен товар " + nameProduct + " стоимостью " + costProduct + " " + formatСurrency(costProduct) + "\n" +
                         "Добавить ещё товар? (да/завершить)");
                 String isAdd = scanner.next(); // считывание ответа пользователя
                 if (isAdd.equalsIgnoreCase("да")) {
@@ -88,17 +88,19 @@ public class Main {
     private static String formatСurrency(double input) {
         String currency = "";
         int costIndividuallyModify = (int) (input % 10);
-        switch (costIndividuallyModify) {
-            case 1:
-                currency = "рубль";
-                break;
-            case 2:
-            case 3:
-            case 4:
-                currency = "рубля";
-                break;
-            default:
-                currency = "рублей";
+        int cost = (int) input;
+        if (cost == 1) {
+            currency = "рубль";
+        } else {
+            switch (costIndividuallyModify) {
+                case 2:
+                case 3:
+                case 4:
+                    currency = "рубля";
+                    break;
+                default:
+                    currency = "рублей";
+            }
         }
         return currency;
     }
