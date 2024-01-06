@@ -10,14 +10,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         // 1 задача
         System.out.println("Приветствую дорогой друг!\nНа сколько человек необходимо разделить счёт?");
-        try {
-            while (true) {
-                numberGuests = scanner.nextInt();
-                boolean toBeCont = countGuests(numberGuests);
-                if (!toBeCont) break;
-            }
-        } catch (Exception e) {
-            System.out.println("Необходимо количество гостей задать с помощью цифр");
+        while (true) {
+            boolean toBeCont = countGuests(scanner);
+            if (!toBeCont) break;
         }
         // 2 задача
         listProduct = new ArrayList<>();
@@ -39,15 +34,23 @@ public class Main {
     }
 
     // метод счёта деления счёта
-    private static boolean countGuests(int input) {
-        if (input == 1) {
-            System.out.println("Весь счёт тогда оплачивает один человек!");
-            return false;
-        } else if (input > 1) {
-            System.out.println("Отлично! Сейчас посчитаю ...");
-            return false;
-        } else {
-            System.out.println("Вы введи некорректное число! Попробуйте ввести ещё раз");
+    private static boolean countGuests(Scanner scanner) {
+        try {
+            int numberIntGuests = Integer.parseInt(scanner.next()); // считывание количества гостей
+            if (numberIntGuests == 1) {
+                System.out.println("Весь счёт тогда оплачивает один человек!");
+                numberGuests = 1;
+                return false;
+            } else if (numberIntGuests > 1) {
+                System.out.println("Отлично! Сейчас посчитаю ...");
+                numberGuests = numberIntGuests;
+                return false;
+            } else {
+                System.out.println("Вы введи некорректное число! Попробуйте ввести ещё раз");
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Необходимо количество гостей задать с помощью цифр");
             return true;
         }
     }
@@ -55,19 +58,29 @@ public class Main {
     // метод добавления товаров в корзину
     private static boolean addProducts(Scanner scanner) {
         String nameProduct = scanner.next(); // считывание названия продукта
-        double costProduct = Double.parseDouble(scanner.next()); // считывание стоимости продукта
-        costSum += costProduct; // подсчёт суммы введённых товаров
-        listProduct.add(new Product(nameProduct, costProduct));
-        System.out.println("В корзину был добавлен товар " + nameProduct + " стоимостью " + costProduct + " рублей\n" +
-                "Добавить ещё товар? (да/завершить)");
-        String isAdd = scanner.next(); // считывание ответа пользователя
-        if (isAdd.equalsIgnoreCase("да")) {
+        try {
+            double costProduct = Double.parseDouble(scanner.next()); // считывание стоимости продукта
+            if(costProduct > 0) {
+                costSum += costProduct; // подсчёт суммы введённых товаров
+                listProduct.add(new Product(nameProduct, costProduct));
+                System.out.println("В корзину был добавлен товар " + nameProduct + " стоимостью " + costProduct + " рублей\n" +
+                        "Добавить ещё товар? (да/завершить)");
+                String isAdd = scanner.next(); // считывание ответа пользователя
+                if (isAdd.equalsIgnoreCase("да")) {
+                    return true;
+                } else if (isAdd.equalsIgnoreCase("завершить")) {
+                    return false;
+                } else {
+                    System.out.println("Введена некорректная команда");
+                    return false;
+                }
+            } else {
+                System.out.println("Была введена некорректная стоимость товара, попробуйте ввести товар ещё раз");
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Была введена некорректная стоимость товара, попробуйте ввести товар ещё раз");
             return true;
-        } else if (isAdd.equalsIgnoreCase("завершить")) {
-            return false;
-        } else {
-            System.out.println("Введена некорректная команда");
-            return false;
         }
     }
 
